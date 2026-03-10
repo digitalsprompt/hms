@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Detail</title>
+    <title>Booking Cancel</title>
     <script src="https://kit.fontawesome.com/692189991f.js" crossorigin="anonymous"></script>
 
     <!-- Main StyleSheet -->
@@ -45,24 +45,11 @@
             <form id="booking-form" action="" method="POST">
 
                 {% csrf_token %}
-
-                <input type="hidden" name="room_category" value="{{ room_category_value }}">
-
                 <!-- Input Div -->
+                <h2>Are you sure you want to cancel this booking:</h2>
+                <h3>{{booking.room.room_number}} {{booking.get_room_category}} {{booking}}?</h3>
                 <div class="input-div">
-                    <label for="id_check_in">Check In : </label>
-                    <input type="datetime-local" id="id_check_in" name="check_in">
-                </div>
-
-                <!-- Input Div -->
-                <div class="input-div">
-                    <label for="id_check_out">Check Out : </label>
-                    <input type="datetime-local" id="id_check_out" name="check_out">
-                </div>
-
-                <!-- Input Div -->
-                <div class="input-div">
-                    <button type="submit">Book the Room</button>
+                    <button type="submit">Cancel Booking</button>
                 </div>
 
             </form>
