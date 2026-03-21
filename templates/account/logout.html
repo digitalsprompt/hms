@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<header class="page-hero">
+  <div class="page-hero-content">
+    <p class="label">Account Access</p>
+    <h1>Log Out Securely</h1>
+    <p>Finish your session cleanly and return whenever you are ready to manage bookings again.</p>
+  </div>
+</header>
+
+<main class="section auth-shell">
+  <section class="auth-card center-text">
+    <h2>Confirm Logout</h2>
+    <p class="auth-subtitle">Are you sure you want to log out of your StaySync account?</p>
+
+    <form method="post" action="{% url 'account_logout' %}" class="auth-actions center">
+      {% csrf_token %}
+      <button type="submit" class="btn danger">Yes, Log Out</button>
+      <a href="{% url 'hotel:index' %}" class="btn ghost-dark">Cancel</a>
+    </form>
+  </section>
+</main>
+{% endblock %}

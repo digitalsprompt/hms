@@ -1,69 +1,88 @@
-    {% load static %}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Hotelina</title>
-        <!-- Main StyleSheet -->
-        <link rel="stylesheet" href="{% static 'hotel/css/room_list_view.css' %}" />
-        <link rel="stylesheet" href="{% static 'hotel/css/nav.css' %}" />
-    </head>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<header class="room-directory-hero">
+    <div class="room-directory-overlay"></div>
+    <div class="room-directory-content">
+        <p class="label">Rooms Collection</p>
+        <h1>Book Your Stay</h1>
+        <p>Reserve your escape with polished interiors, thoughtful amenities, and room options designed for quick city stays or longer luxury weekends.</p>
 
-    <body>
-        <div class="container">
-        {% comment %} <!-- Navbar -->
-        <nav id="navbar">
-            <div class="brand">
-            <a href="https://www.darshandev.com">
-                <h1 id="logo">Hotelina</h1>
-            </a>
+        <div class="room-directory-bar">
+            <div class="room-directory-stat">
+                <span class="room-directory-label">Stay Style</span>
+                <strong>Luxury Comfort</strong>
             </div>
-            <div id="ham-div"  onclick="togglenav()">
-                <img id="ham" src="https://img.icons8.com/material-rounded/24/000000/menu.png"/>
+            <div class="room-directory-stat">
+                <span class="room-directory-label">Room Options</span>
+                <strong>{{ room_list|length }} Available Types</strong>
             </div>
-            <div id="navlist-div" class="">
-            <ul id="navlist" class="folding-nav hidden">
-                {% if request.user.is_authenticated %}
-                <li><a href="{% url 'account_logout' %}">Logout</a></li>
-                {% else %}
-                <li><a href="{% url 'account_login' %}">Login</a></li>
-                <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-                {% endif %}
-            </ul>
+            <div class="room-directory-stat">
+                <span class="room-directory-label">Best For</span>
+                <strong>Business and Leisure</strong>
             </div>
-        </nav> {% endcomment %}
-
-        <!-- Landing -->
-        <div class="landing">
-            <h1>Luxury <span>Re-Defined</span></h1>
-            <img
-            src="../static/hotel/img/hotel-1.jpg"
-            id="landing-img"
-            alt="Best Hotel in the World"
-            srcset=""
-            />
         </div>
+    </div>
+</header>
 
-        <h2>Rooms</h2>
-        <!-- Main Content -->
-        <div id="rooms">
-            {% for room_category, room_url in room_list %}
-            <div class="room">
-            <a href="{{room_url}}">
-            <img
-                src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-            />
-            <h2>{{room_category}}<h2>
-            <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi
-            </p>
-            </a>
+<main class="room-directory-shell">
+    <section class="room-directory-intro">
+        <p class="label">Stay Selection</p>
+        <h2>Find the room that matches your pace</h2>
+        <p>Browse each category like a curated suite profile, compare features at a glance, and jump straight into booking when one feels right.</p>
+    </section>
+
+    <section class="room-showcase-list">
+        {% for room in room_list %}
+        <article class="room-showcase {% if not forloop.counter0|divisibleby:2 %}reverse{% endif %}">
+            <div class="room-showcase-media">
+                <img
+                    src="{{ room.image.url }}"
+                    alt="{{ room.category }} room"
+                    class="room-showcase-photo room-showcase-photo-image">
+                <div class="room-showcase-dots" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
 
-            {% endfor %}
+            <div class="room-showcase-copy">
+                {% comment %} <p class="room-showcase-kicker">City View</p> {% endcomment %}
+                <h3>{{ room.category }} Room</h3>
+
+                <div class="room-showcase-meta">
+                    <span>{{ room.price_per_night|default:"--" }} / night</span>
+                    <span>{{ room.capacity }} Guests</span>
+                    <span>{{ room.beds }} Bed{{ room.beds|pluralize }}</span>
+                    <span>1 Bathroom</span>
+                    <span>Free WiFi</span>
+                    <span>Air Conditioning</span>
+                </div>
+
+                <p class="room-showcase-description">
+                    {{ room.description|default:"Designed for a calm and elevated stay, this room blends comfort, functionality, and a polished hotel feel from check-in to checkout." }}
+                </p>
+
+                <div class="room-showcase-tags">
+                    {% if room.tag1 %}<span>{{ room.tag1 }}</span>{% endif %}
+                    {% if room.tag2 %}<span>{{ room.tag2 }}</span>{% endif %}
+                    {% if room.tag3 %}<span>{{ room.tag3 }}</span>{% endif %}
+                </div>
+
+                <div class="room-showcase-actions">
+                    <a href="{% url 'hotel:RoomDetailView' room.category %}" class="discover-link">Discover More</a>
+                    <a href="{% url 'hotel:RoomDetailView' room.category %}" class="btn small">Book This Room</a>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <div class="room-directory-empty">
+            <p class="label">No Availability</p>
+            <h3>No rooms are available right now.</h3>
+            <p>Please check back shortly for new availability.</p>
         </div>
-        </div>
-        <script src="{% static 'hotel/js/nav.js' %}"></script>
-    </body>
-    </html>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}

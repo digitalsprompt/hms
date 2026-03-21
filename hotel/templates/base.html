@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'hotel/css/index.css' %}">
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+</head>
+<body>
+    <nav class="top-nav">
+            <div class="logo">
+                <a href="{% url 'hotel:index' %}">
+                    <lord-icon
+                        src="https://cdn.lordicon.com/moridxxu.json"
+                        trigger="hover"
+                        class="logo-icon">
+                    </lord-icon>
+                    <span>StaySync</span>
+                </a>
+            </div>
+                <ul>
+                    <li><a href="{% url 'hotel:RoomListView' %}">Rooms</a></li>
+                    <li>
+                        <a href="{% url 'hotel:BookingListView' %}" class="nav-booking-link">Reservations</a>
+                    </li>
+                    {% comment %} <li><a href="{% url 'hotel:index' %}#booking">Book</a></li>
+                    <li><a href="{% url 'hotel:index' %}#payment">Payment</a></li> {% endcomment %}
+                </ul>
+                <div class="nav-actions">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'profile_details' %}" class="nav-user">
+                        <lord-icon
+                            src="https://cdn.lordicon.com/kdduutaw.json"
+                            trigger="hover"
+                            class="nav-profile-icon">
+                        </lord-icon>
+                        <span>Hi, {{ user.username }}</span>
+                    </a>
+                    <form method="post" action="{% url 'account_logout' %}" class="nav-logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn small ghost nav-logout-btn">Logout</button>
+                    </form>
+                    {% else %}
+                    <a class="btn small ghost" href="{% url 'account_login' %}">Login</a>
+                    <a class="btn small" href="{% url 'account_signup' %}">Sign Up</a>
+                    {% endif %}
+                </div>
+        </nav>
+
+        {% if messages %}
+        <div class="flash-messages">
+            {% for message in messages %}
+            <div class="flash-message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+</body>
+</html>

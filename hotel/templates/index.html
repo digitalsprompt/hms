@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="editorial-hero" id="home">
+    <div class="editorial-hero-inner">
+        {% comment %} <p class="label">Lekki, Lagos</p> {% endcomment %}
+        <span class="editorial-overline">Luxury hotel and residence</span>
+        <h1>Exclusive Elegance &amp; Bliss Await You</h1>
+        <p class="editorial-subtitle">
+            Step into a polished waterfront stay where refined rooms, memorable city views, and seamless booking all live in one place.
+        </p>
+        <div class="hero-actions">
+            <a class="btn" href="{% url 'hotel:RoomListView' %}">Check Availability</a>
+            <a class="btn ghost" href="#rooms">View Suites</a>
+        </div>
+    </div>
+</section>
+
+<main class="editorial-home">
+    <section class="editorial-section sanctuary-section">
+        <div class="sanctuary-media">
+            <div class="sanctuary-photo sanctuary-photo-tall"></div>
+            <div class="sanctuary-photo sanctuary-photo-float"></div>
+        </div>
+        <div class="sanctuary-copy">
+            <p class="label">A Curated Destination</p>
+            <h2>Sophisticated Sanctuary.</h2>
+            <p>
+                From waterfront mornings to city-lit evenings, StaySync is designed for travelers who want a serene base without losing access to business districts, nightlife, and standout dining.
+            </p>
+            <p>
+                Every detail is tuned toward comfort: inviting architecture, carefully styled rooms, and booking flows that help guests move from discovery to check-in without friction.
+            </p>
+        </div>
+    </section>
+
+    {% comment %} <section class="editorial-panorama" aria-label="StaySync exterior view"></section> {% endcomment %}
+
+    <section class="editorial-section rooms-editorial" id="rooms">
+        <div class="section-head section-head-centered">
+            <p class="label">Stay Accommodation</p>
+            <h2>Choose Your Exclusive Suite</h2>
+            <p class="section-copy">
+                Signature rooms for solo escapes, romantic weekends, and family stays, presented with the same premium calm you expect from the property itself.
+            </p>
+        </div>
+
+        <div class="rooms-carousel editorial-carousel" data-carousel>
+            <button class="carousel-arrow carousel-arrow-prev" type="button" aria-label="Previous room" data-carousel-prev>
+                &#8249;
+            </button>
+
+            <div class="featured-room-list" data-carousel-track>
+                {% for room in room_list %}
+                <article class="featured-room-stage editorial-room-stage" data-carousel-slide>
+                    <div class="room-rail room-rail-left" style="background-image: url('{{ room.image.url }}');"></div>
+                    <div class="featured-room-main" style="background-image: linear-gradient(180deg, rgba(17, 19, 21, 0.2), rgba(17, 19, 21, 0.6)), url('{{ room.image.url }}');">
+                        <div class="featured-room-overlay"></div>
+                        <div class="featured-room-content">
+                            <p class="featured-room-kicker">Signature Collection</p>
+                            <h3>{{ room.category }} Room</h3>
+                            <p class="featured-room-description">
+                                {{ room.description|default:"Refined interiors, restful bedding, and a polished atmosphere tailored for a memorable stay." }}
+                            </p>
+                            <div class="featured-room-meta">
+                                <span>{{ room.capacity }} Guests</span>
+                                <span>{{ room.beds }} Bed{{ room.beds|pluralize }}</span>
+                                <span>${{ room.price_per_night }}/night</span>
+                                <span>Free WiFi</span>
+                                <span>Air Conditioning</span>
+                                <span>Breakfast Ready</span>
+                            </div>
+                            <a href="{% url 'hotel:RoomDetailView' room.category %}" class="btn featured-room-btn">Discover More</a>
+                        </div>
+                    </div>
+                    <div class="room-rail room-rail-right" style="background-image: url('{{ room.image.url }}');"></div>
+                </article>
+                {% empty %}
+                <article class="editorial-empty-state">
+                    <h3>No rooms available right now.</h3>
+                    <p>Please check back soon for new availability.</p>
+                </article>
+                {% endfor %}
+            </div>
+
+            <button class="carousel-arrow carousel-arrow-next" type="button" aria-label="Next room" data-carousel-next>
+                &#8250;
+            </button>
+        </div>
+
+        <div class="carousel-dots" data-carousel-dots>
+            {% for room in room_list %}
+            <button
+                type="button"
+                class="carousel-dot{% if forloop.first %} is-active{% endif %}"
+                aria-label="Go to room {{ forloop.counter }}"
+                data-carousel-dot="{{ forloop.counter0 }}">
+            </button>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="editorial-section amenity-strip">
+        <p class="label">Featured Facilities</p>
+        <div class="amenity-row">
+            <span>Infinity Pool</span>
+            <span>Skyline Dining</span>
+            <span>Wellness Lounge</span>
+            <span>Free WiFi</span>
+            <span>Airport Pickup</span>
+            <span>Private Events</span>
+        </div>
+        <div class="amenity-points">
+            <p>Thoughtful hospitality touches designed for both business travel and slow luxury weekends.</p>
+            <p>Premium comfort, modern security, and memorable social spaces woven throughout the property.</p>
+        </div>
+    </section>
+
+    <section class="editorial-split-grid">
+        <article class="editorial-split-card editorial-split-photo"></article>
+        <article class="editorial-split-card editorial-split-copy" id="booking">
+            <p class="label">The Beauty of the Night</p>
+            <h2>An Enchanting Escape Under the Stars</h2>
+            <p>
+                Browse room options, compare what fits your trip best, and move into booking with a flow made for confidence and speed.
+            </p>
+            <a class="btn" href="{% url 'hotel:RoomListView' %}">Reserve a Room</a>
+        </article>
+        <article class="editorial-split-card editorial-split-copy alt" id="payment">
+            <p class="label">World-Class Amenities</p>
+            <h2>Secure Stays With Seamless Payment</h2>
+            <p>
+                Confirm your reservation and head straight into checkout with a payment journey built to feel clear, polished, and reliable.
+            </p>
+            <a class="btn" href="{% url 'hotel:BookingListView' %}">Go to Booking List</a>
+        </article>
+        <article class="editorial-split-card editorial-split-photo secondary"></article>
+    </section>
+
+    <section class="editorial-section editorial-cards-grid">
+        <article class="editorial-card light">
+            <div class="editorial-card-media wellness"></div>
+            <div class="editorial-card-copy">
+                <p class="label">Health &amp; Wellness</p>
+                <h3>Sogole Wellness Center</h3>
+                <p>Recharge with a quieter corner of the property dedicated to relaxation, reset, and recovery.</p>
+                <a href="{% url 'hotel:RoomListView' %}" class="discover-link">Explore More</a>
+            </div>
+        </article>
+
+        <article class="editorial-card dark">
+            <div class="editorial-card-media rooftop"></div>
+            <div class="editorial-card-copy">
+                <p class="label">Lagoon View</p>
+                <h3>Somewhere on Earth Lounge</h3>
+                <p>Unwind against warm city lights and lagoon-facing perspectives that make evenings feel cinematic.</p>
+                <a href="{% url 'hotel:RoomListView' %}" class="discover-link">Discover</a>
+            </div>
+        </article>
+
+        <article class="editorial-card dark">
+            <div class="editorial-card-media city"></div>
+            <div class="editorial-card-copy">
+                <p class="label">Stay Plans</p>
+                <h3>Things to Do in Lagos</h3>
+                <p>From city landmarks to late-night waterfront spots, your stay begins with the right base.</p>
+                <a href="{% url 'hotel:RoomListView' %}" class="discover-link">Learn More</a>
+            </div>
+        </article>
+    </section>
+
+    <section class="editorial-review-banner">
+        <div class="editorial-review-overlay"></div>
+        <div class="editorial-review-content">
+            <a class="btn" href="{% url 'hotel:BookingListView' %}">Book Now</a>
+            <h2>Guest Reviews</h2>
+        </div>
+    </section>
+</main>
+
+<script>
+    (function () {
+        const carousel = document.querySelector("[data-carousel]");
+        if (!carousel) return;
+
+        const track = carousel.querySelector("[data-carousel-track]");
+        const slides = Array.from(track.querySelectorAll("[data-carousel-slide]"));
+        const prevButton = carousel.querySelector("[data-carousel-prev]");
+        const nextButton = carousel.querySelector("[data-carousel-next]");
+        const dots = Array.from(document.querySelectorAll("[data-carousel-dot]"));
+
+        if (!slides.length) return;
+
+        let currentIndex = 0;
+
+        function updateCarousel(index) {
+            currentIndex = (index + slides.length) % slides.length;
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            dots.forEach((dot, dotIndex) => {
+                dot.classList.toggle("is-active", dotIndex === currentIndex);
+            });
+        }
+
+        prevButton?.addEventListener("click", function () {
+            updateCarousel(currentIndex - 1);
+        });
+
+        nextButton?.addEventListener("click", function () {
+            updateCarousel(currentIndex + 1);
+        });
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener("click", function () {
+                updateCarousel(index);
+            });
+        });
+
+        updateCarousel(0);
+    })();
+</script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="page-hero">
+    <div class="page-hero-content">
+        <p class="label">Payment Failed</p>
+        <h1>We Could Not Confirm Payment</h1>
+        <p>Your booking was not charged successfully, or verification failed.</p>
+    </div>
+</header>
+
+<main class="section auth-shell">
+    <div class="confirmation-card">
+        <h2>Transaction Failed</h2>
+        {% if payment %}
+        <p>Reference: {{ payment.reference }}</p>
+        <p>Amount attempted: NGN {{ payment.amount }}</p>
+        {% endif %}
+        <div class="confirmation-actions">
+            {% if booking %}
+            <a href="{% url 'payment:pay' booking.pk %}" class="btn">Try Again</a>
+            {% endif %}
+            <a href="{% url 'hotel:BookingListView' %}" class="btn ghost-dark">Back to Bookings</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

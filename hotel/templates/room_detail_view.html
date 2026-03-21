@@ -1,77 +1,136 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block content %}
+<section class="room-detail-hero">
+    <div class="room-detail-hero-media" style="background-image: url('{{ room.image.url }}');">
+        <div class="room-detail-hero-overlay"></div>
+    </div>
+</section>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Detail</title>
-    <script src="https://kit.fontawesome.com/692189991f.js" crossorigin="anonymous"></script>
+<main class="room-detail-shell">
+    <section class="room-detail-layout">
+        <div class="room-detail-main">
+            <div class="detail-nav detail-nav-dark">
+                <a class="chip chip-dark" href="{% url 'hotel:index' %}">Home</a>
+                <a class="chip chip-dark" href="{% url 'hotel:RoomListView' %}">All Rooms</a>
+                <a class="chip chip-dark" href="{% url 'hotel:BookingListView' %}">My Bookings</a>
+            </div>
 
-    <!-- Main StyleSheet -->
-    <link rel="stylesheet" href="{% static 'hotel/css/room_detail_view.css' %}">
+            <p class="room-detail-kicker">City View</p>
+            <h1>{{ room_category }} Room</h1>
 
-</head>
+            <div class="room-detail-meta">
+                <span>${{ room.price_per_night }}/night</span>
+                <span>{{ room.capacity }} Guests</span>
+                <span>{{ room.beds }} Bed{{ room.beds|pluralize }}</span>
+                <span>1 Bathroom</span>
+                <span>Free WiFi</span>
+                <span>Air Conditioning</span>
+            </div>
 
-<body>
+            <div class="room-detail-price-block">
+                <strong>${{ room.price_per_night }}</strong>
+                <span>/ night</span>
+            </div>
 
-    <!-- Main Content -->
-    <div class="content">
+            <p class="room-detail-description">
+                {{ room.description|default:"Experience comfort and style in a polished room designed for restorative nights, smooth work sessions, and a memorable stay from arrival to checkout." }}
+            </p>
 
-        <!-- Room Image -->
-        <div class="image">
-            <img
-                src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60">
+            <p class="room-detail-description secondary">
+                Every detail of the {{ room_category|lower }} room is styled to balance calm, convenience, and a refined hospitality mood. It is ideal for guests who want comfort with a more elevated hotel atmosphere.
+            </p>
+
+            <section class="room-detail-amenities">
+                <h2>Room Amenities</h2>
+                <div class="room-detail-amenity-grid">
+                    <span>Air conditioner</span>
+                    <span>Cable TV</span>
+                    <span>WiFi &amp; Internet</span>
+                    <span>Towels</span>
+                    <span>Slippers</span>
+                    <span>Wardrobe</span>
+                    <span>Hair Dryer</span>
+                    <span>Shampoo</span>
+                    <span>Electric Kettle</span>
+                    <span>Safe Box</span>
+                    <span>Mini Refrigerator</span>
+                    <span>Soundproof windows</span>
+                </div>
+            </section>
+
+            <section class="room-detail-included">
+                <h2>What's included in this suite?</h2>
+                <ul class="detail-list detail-list-dark">
+                    <li>City view</li>
+                    <li>Wake-up service</li>
+                    <li>Reading desk</li>
+                    <li>Fresh linen</li>
+                    {% if room.tag1 %}<li>{{ room.tag1 }}</li>{% endif %}
+                    {% if room.tag2 %}<li>{{ room.tag2 }}</li>{% endif %}
+                    {% if room.tag3 %}<li>{{ room.tag3 }}</li>{% endif %}
+                </ul>
+            </section>
         </div>
 
-        <!-- Room Details -->
-        <div class="room">
-
-            <!-- Div 1: Back to Home -->
-            <div class="home">
-                <a href="{% url 'hotel:RoomListView' %}"><i class="fas fa-arrow-alt-circle-left">Home</i></a>
+        <aside class="room-reserve-card">
+            <div class="room-reserve-head">
+                <div>
+                    <p class="label">Reserve</p>
+                    <h2>Book Your Stay</h2>
+                </div>
+                <div class="room-reserve-price">
+                    <span>From</span>
+                    <strong>${{ room.price_per_night }}/night</strong>
+                </div>
             </div>
 
-            <!-- Div 2: Room Information -->
-            <div class="room-info">
-                <h1>{{room_category}}</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Id optio rem saepe culpa architecto tempora
-                    numquam debitis reiciendis! Quaerat laudantium consequuntur doloribus quod placeat consectetur
-                    veniam,
-                    rerum repellendus magnam labore. </p>
-            </div>
-
-            <!-- Div 3: Room Booking Form -->
-            <form id="booking-form" action="" method="POST">
-
+            <form class="room-reserve-form" action="" method="POST">
                 {% csrf_token %}
+                <label for="{{ form.check_in.id_for_label }}">
+                    Check In
+                    {{ form.check_in }}
+                </label>
+                <label for="{{ form.check_out.id_for_label }}">
+                    Check Out
+                    {{ form.check_out }}
+                </label>
 
-                <input type="hidden" name="room_category" value="{{ room_category_value }}">
+                {% comment %} <div class="room-extra-services">
+                    <h3>Extra Services</h3>
+                    <ul>
+                        <li><span>Daily housekeeping</span><strong>Free</strong></li>
+                        <li><span>Massage / Spa</span><strong>Optional</strong></li>
+                        <li><span>Ironing service</span><strong>Optional</strong></li>
+                        <li><span>Laundry</span><strong>Optional</strong></li>
+                    </ul>
+                </div> {% endcomment %}
 
-                <!-- Input Div -->
-                <div class="input-div">
-                    <label for="id_check_in">Check In : </label>
-                    <input type="datetime-local" id="id_check_in" name="check_in">
+                <div class="room-cost-summary">
+                    <div class="room-cost-row">
+                        <span>Total Cost</span>
+                        <strong>${{ room.price_per_night }}</strong>
+                    </div>
+                    <div class="room-cost-row muted">
+                        <span>Total Base Price</span>
+                        <span>${{ room.price_per_night }}</span>
+                    </div>
                 </div>
 
-                <!-- Input Div -->
-                <div class="input-div">
-                    <label for="id_check_out">Check Out : </label>
-                    <input type="datetime-local" id="id_check_out" name="check_out">
-                </div>
-
-                <!-- Input Div -->
-                <div class="input-div">
-                    <button type="submit">Book the Room</button>
-                </div>
-
+                <button type="submit" class="btn full room-reserve-btn">Book Your Stay Now</button>
             </form>
 
-
-        </div> <!-- END Room Div -->
-
-    </div> <!-- END Main Content Div -->
-
-</body>
-
-</html>
+            <div class="room-reserve-static-grid">
+                <div class="room-reserve-static">
+                    <span>Room</span>
+                    <strong>1 Room</strong>
+                </div>
+                <div class="room-reserve-static">
+                    <span>Guests</span>
+                    <strong>{{ room.capacity }} Max</strong>
+                </div>
+            </div>
+        </aside>
+    </section>
+</main>
+{% endblock %}

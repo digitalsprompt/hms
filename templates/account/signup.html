@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block content %}
+<header class="page-hero">
+  <div class="page-hero-content">
+    <p class="label">Account Access</p>
+    <h1>Create Your StaySync Account</h1>
+    <p>Join the platform to manage bookings, track payments, and personalize your profile.</p>
+  </div>
+</header>
+
+<main class="section auth-shell">
+  <section class="auth-card">
+    <h2>Create Account</h2>
+    <p class="auth-subtitle">Set up your account in a few quick steps.</p>
+
+    {% if messages %}
+      {% for message in messages %}
+      <div class="form-success">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    {% if form.non_field_errors %}
+    <div class="form-error">{{ form.non_field_errors.0 }}</div>
+    {% endif %}
+
+    <form class="auth-form" method="post" action="{% url 'account_signup' %}">
+      {% csrf_token %}
+
+      <div class="auth-field">
+        <label for="id_username">Username</label>
+        <input type="text" name="username" id="id_username" placeholder="yourusername" value="{{ form.username.value|default_if_none:'' }}" required />
+        {% if form.username.errors %}
+        <p class="form-hint">{{ form.username.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <div class="auth-field">
+        <label for="id_email">Email</label>
+        <input type="email" name="email" id="id_email" placeholder="you@example.com" value="{{ form.email.value|default_if_none:'' }}" required />
+        {% if form.email.errors %}
+        <p class="form-hint">{{ form.email.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <div class="auth-field">
+        <label for="id_password1">Password</label>
+        <input type="password" id="id_password1" name="password1" placeholder="********" required />
+        {% if form.password1.errors %}
+        <p class="form-hint">{{ form.password1.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <div class="auth-field">
+        <label for="id_password2">Confirm Password</label>
+        <input type="password" id="id_password2" name="password2" placeholder="********" required />
+        {% if form.password2.errors %}
+        <p class="form-hint">{{ form.password2.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn full">Sign Up</button>
+    </form>
+
+    <div class="auth-divider">Or sign up with</div>
+
+    <div class="social-row">
+      <a href="{% provider_login_url 'google' %}" class="social-btn">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" />
+      </a>
+      <a href="{% provider_login_url 'github' %}" class="social-btn">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" />
+      </a>
+    </div>
+
+    <p class="auth-switch center-text">
+      Already have an account?
+      <a href="{% url 'account_login' %}">Sign In</a>
+    </p>
+  </section>
+</main>
+{% endblock %}

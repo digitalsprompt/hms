@@ -1,0 +1,21 @@
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Subject: [example.com] Please Confirm Your Email Address
+From: noreply@gmail.com
+To: user1@gmail.com
+Date: Wed, 18 Mar 2026 08:36:42 +0000
+Message-ID: <177382300258.12676.2890928019230946580@DESKTOP-1ANDKHD>
+
+Hello from example.com!
+
+You're receiving this email because user user1 has given your email address t=
+o register an account on example.com.
+
+To confirm this is correct, go to http://127.0.0.1:8000/account/confirm-email=
+/OA:1w2mOQ:nTopNrbZKEFdq2kIokmZ6GgUsyfWpxBORA-wbAfhyLI/
+
+Thank you for using example.com!
+example.com
+
+-------------------------------------------------------------------------------

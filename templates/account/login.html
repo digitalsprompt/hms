@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block content %}
+<header class="page-hero">
+  <div class="page-hero-content">
+    <p class="label">Account Access</p>
+    <h1>Sign In To StaySync</h1>
+    <p>Access your bookings, payment history, and profile from one polished dashboard.</p>
+  </div>
+</header>
+
+<main class="section auth-shell">
+  <section class="auth-card">
+    <h2>Welcome Back</h2>
+    <p class="auth-subtitle">Sign in with your email and password, or continue with a connected provider.</p>
+
+    {% if form.non_field_errors %}
+    <div class="form-error">
+      {% for error in form.non_field_errors %}
+      <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <form class="auth-form" method="POST" action="{% url 'account_login' %}">
+      {% csrf_token %}
+
+      <div class="auth-field">
+        <label for="id_login">Email</label>
+        <input
+          id="id_login"
+          type="email"
+          name="login"
+          value="{{ form.login.value|default_if_none:'' }}"
+          placeholder="you@example.com"
+          required
+        />
+        {% if form.login.errors %}
+        <p class="form-hint">{{ form.login.errors.as_text|cut:"*" }}</p>
+        {% endif %}
+      </div>
+
+      <div class="auth-field">
+        <label for="id_password">Password</label>
+        <input
+          id="id_password"
+          type="password"
+          name="password"
+          value="{{ form.password.value|default_if_none:'' }}"
+          placeholder="********"
+          required
+        />
+        {% if form.password.errors %}
+        <p class="form-hint">{{ form.password.errors.as_text|cut:"*" }}</p>
+        {% endif %}
+        <p class="auth-help"><a href="{% url 'account_reset_password' %}">Forgot password?</a></p>
+      </div>
+
+      <button type="submit" class="btn full">Sign In</button>
+    </form>
+
+    <div class="auth-divider">Or sign in with</div>
+
+    <div class="social-row">
+      <a href="{% provider_login_url 'google'%}" class="social-btn">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google" />
+      </a>
+      <a href="{% provider_login_url 'github'%}" class="social-btn">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" />
+      </a>
+    </div>
+
+    <p class="auth-switch center-text">
+      Don't have an account?
+      <a href="{% url 'account_signup' %}">Sign up</a>
+    </p>
+  </section>
+</main>
+{% endblock %}

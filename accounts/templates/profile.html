@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<header class="page-hero">
+  <div class="page-hero-content">
+    <p class="label">Account Profile</p>
+    <h1>Your StaySync Profile</h1>
+    <p>See your completed booking history, profile details, and account actions in one place.</p>
+  </div>
+</header>
+
+<main class="section auth-shell stack">
+  <section class="auth-card wide">
+    <div class="profile-hero-card">
+      <div>
+        {% if profile.image %}
+        <img src="{{ profile.image.url }}" alt="User Avatar" class="profile-avatar" />
+        {% else %}
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User Avatar" class="profile-avatar" />
+        {% endif %}
+      </div>
+      <div class="profile-meta">
+        <div>
+          <p class="label">Member Profile</p>
+          <h2>{{ user.username }}</h2>
+          <p class="auth-subtitle">{{ user.email }}</p>
+        </div>
+
+        <div class="profile-grid">
+          <div class="profile-panel">
+            <h3>Phone Number</h3>
+            <p>{{ profile.phone_number|default:"No phone number added yet" }}</p>
+          </div>
+          <div class="profile-panel">
+            <h3>Address</h3>
+            <p>{{ profile.address|default:"No address added yet" }}</p>
+          </div>
+          <div class="profile-panel full">
+            <h3>Bio</h3>
+            <p>{{ profile.bio|default:"No bio added yet." }}</p>
+          </div>
+        </div>
+
+        <div class="auth-actions">
+          <a href="{% url 'profile_details' %}" class="btn">Profile</a>
+          <a href="{% url 'profile_update' %}" class="btn ghost-dark">Edit Profile</a>
+          <a href="{% url 'hotel:index' %}" class="btn ghost-dark">Back Home</a>
+          <a href="{% url 'hotel:BookingListView' %}" class="btn ghost-dark">View Active Bookings</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="auth-card wide">
+    <h2>Booking History</h2>
+    <p class="auth-subtitle">Completed reservations move here automatically after successful payment.</p>
+
+    <div class="history-list">
+      {% for payment in booking_history %}
+      <article class="history-item">
+        <div>
+          <h3>{{ payment.booking.get_room_category }} Room</h3>
+          <p>Reference: {{ payment.reference }}</p>
+          <p>
+            Check-in: {{ payment.booking.check_in|date:"d M Y, H:i" }} |
+            Check-out: {{ payment.booking.check_out|date:"d M Y, H:i" }}
+          </p>
+          <p>
+            Beds: {{ payment.booking.room.beds }} |
+            Guests: {{ payment.booking.room.capacity }}
+          </p>
+        </div>
+        <div class="history-amount">
+          <p class="label">Status</p>
+          <p>{{ payment.status }}</p>
+          <strong>NGN {{ payment.amount }}</strong>
+          <p>{{ payment.updated_at|date:"d M Y, H:i" }}</p>
+        </div>
+      </article>
+      {% empty %}
+      <div class="profile-panel full center-text">
+        <h3>No booking history yet</h3>
+        <p class="auth-subtitle">Once a room is booked and payment is completed, it will appear here.</p>
+        <a href="{% url 'hotel:RoomListView' %}" class="btn">Book a Room</a>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+{% endblock %}

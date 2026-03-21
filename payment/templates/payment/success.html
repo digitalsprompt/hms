@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="page-hero">
+    <div class="page-hero-content">
+        <p class="label">Payment Complete</p>
+        <h1>Payment Successful</h1>
+        <p>Your booking payment has been confirmed.</p>
+    </div>
+</header>
+
+<main class="section auth-shell">
+    <div class="confirmation-card">
+        <h2>Transaction Approved</h2>
+        <p>Reference: {{ payment.reference }}</p>
+        <p>Room: {{ booking.get_room_category }}</p>
+        <p>Amount paid: NGN {{ payment.amount }}</p>
+        <div class="confirmation-actions">
+            <a href="{% url 'hotel:BookingListView' %}" class="btn">Back to Bookings</a>
+            <a href="{% url 'hotel:index' %}" class="btn ghost-dark">Return Home</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

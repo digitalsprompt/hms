@@ -1,0 +1,29 @@
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Subject: [example.com] Password Reset Email
+From: noreply@gmail.com
+To: user1@gmail.com
+Date: Wed, 18 Mar 2026 09:10:40 +0000
+Message-ID: <177382504003.31188.13631626910994911436@DESKTOP-1ANDKHD>
+
+Hello from example.com!
+
+
+You're receiving this email because a password reset was requested for your a=
+ccount.
+
+Use the reset link below to choose a new password:
+http://127.0.0.1:8000/account/password/reset/key/8-d5ms9r-25d404944d1214741dd=
+f49b2dd557775/
+
+Reset token:
+8-d5ms9r-25d404944d1214741ddf49b2dd557775
+
+
+
+
+Thank you for using example.com!
+example.com
+
+-------------------------------------------------------------------------------

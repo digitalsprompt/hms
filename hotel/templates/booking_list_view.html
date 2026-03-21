@@ -1,55 +1,57 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block content %}
+<header class="page-hero">
+    <div class="page-hero-content">
+        <p class="label">Reservations</p>
+        <h1>Your Bookings</h1>
+        <p>Track upcoming stays, review reservation dates, and cancel a booking when your plans change.</p>
+    </div>
+</header>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking List</title>
-    <script src="https://kit.fontawesome.com/692189991f.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{% static 'hotel/css/booking_list_view.css' %}">
-</head>
+<main class="section">
+    <div class="section-head">
+        <p class="label">Booking History</p>
+        <h2>Welcome, {{ user.username|default:user }}</h2>
+    </div>
 
-<body>
-    <div class="content">
-        <div class="header">
-            <div class="headings">
-                <h1>Your Bookings</h1>
-                <h2>Welcome dear {{user}}</h2>
-            </div>
-            <div class="home">
-                <!-- Div 1: Back to Home -->
-                <div class="home">
-                    {% comment %} <a href="{% url 'hotel:RoomListView' %}"><i class="fas fa-arrow-alt-circle-left">Home</i></a> {% endcomment %}
-                </div>
-            </div>
-
-        </div>
-
-        <div class="bookings">
+    <div class="payment-layout booking-layout">
+        <div class="booking-grid">
             {% for booking in booking_list %}
-            <div class="booking">
-                <img src="https://images.unsplash.com/photo-1560067174-c5a3a8f37060?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
-                    alt="">
-                <div class="category">
-                    <h2>{{booking.get_room_category}} Suite</h2>
+            <article class="booking-card">
+                <div class="booking-card-media"></div>
+                <div class="booking-card-body">
+                    <h3>{{ booking.get_room_category }} Room</h3>
+                    <p>Your reservation is active for the selected dates below.</p>
+                    <div class="meta">
+                        <span>From {{ booking.check_in|date:"d M Y, H:i" }}</span>
+                        <span>To {{ booking.check_out|date:"d M Y, H:i" }}</span>
+                        <span>{{ booking.room.beds }} Beds</span>
+                        <span>{{ booking.room.capacity }} Guests</span>
+                        <span>${{ booking.room.price_per_night }}/night</span>
+                    </div>
+                    <a href="{{ booking.get_cancel_booking_url }}" class="btn small">Cancel Booking</a>
                 </div>
-                <div class="from">
-                    <h3>From: {{booking.check_in}}</h3>
-                </div>
-                <div class="to">
-                    <h3>To: {{booking.check_out}}</h3>
-                </div>
-                <div class="beds">
-                    <h3>Beds: {{booking.room.beds}}</h3>
-                </div>
-                <div class="capacity">
-                    <h3>Capacity: {{booking.room.capacity}}</h3>
-                </div>
-                <div class="cancel"><a href="{{booking.get_cancel_booking_url}}" class="invisible"><i class="far fa-2x fa-times-circle"> Cancel Booking</i></a></div>
-            </div>
+            </article>
+            {% empty %}
+            <p class="empty-state">You do not have any bookings yet.</p>
             {% endfor %}
         </div>
-</body>
 
-</html>
+        <aside class="summary-card">
+            <h3>Booking Summary</h3>
+            <ul>
+                <li><span>Reservations:</span><strong>{{ total_bookings }}</strong></li>
+                <li><span>Total Nights:</span><strong>{{ total_nights }}</strong></li>
+                <li><span>Guest Capacity:</span><strong>{{ total_guests }}</strong></li>
+            </ul>
+            <div class="total">
+                <span>Estimated Total</span>
+                <strong>${{ total_due }}</strong>
+            </div>
+            <p class="note">Review your reservation details, then continue to the payment section to complete checkout.</p>
+            <a href="{{ checkout_url }}" class="btn full booking-checkout-btn">Proceed to Checkout</a>
+        </aside>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="page-hero">
+    <div class="page-hero-content">
+        <p class="label">Checkout</p>
+        <h1>Complete Your Payment</h1>
+        <p>Review your booking details and continue securely with Paystack.</p>
+    </div>
+</header>
+
+<main class="section auth-shell">
+    <div class="payment-layout">
+        <section class="summary-card">
+            <h3>Payment Summary</h3>
+            <ul>
+                <li><span>Booking Ref:</span><strong>{{ payment.reference }}</strong></li>
+                <li><span>Room:</span><strong>{{ booking.get_room_category }}</strong></li>
+                <li><span>Check-in:</span><strong>{{ booking.check_in|date:"d M Y, H:i" }}</strong></li>
+                <li><span>Check-out:</span><strong>{{ booking.check_out|date:"d M Y, H:i" }}</strong></li>
+            </ul>
+            <div class="total">
+                <span>Total Due</span>
+                <strong>NGN {{ amount_display }}</strong>
+            </div>
+            <p class="note">You will be redirected through Paystack to complete payment securely.</p>
+        </section>
+
+        <section class="summary-card">
+            <h3>Paystack Checkout</h3>
+            <p class="note">Customer email: {{ email|default:"No email available" }}</p>
+            <button id="paystack-button" type="button" class="btn full">Pay Now</button>
+            <p class="note">If the popup does not open, confirm that your public key is configured in settings.</p>
+        </section>
+    </div>
+</main>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+  document.getElementById("paystack-button").addEventListener("click", function () {
+    const handler = PaystackPop.setup({
+      key: "{{ paystack_public_key }}",
+      email: "{{ email|escapejs }}",
+      amount: {{ amount_kobo }},
+      ref: "{{ reference }}",
+      callback: function () {
+        window.location.href = "{{ callback_url }}?reference={{ reference }}";
+      }
+    });
+    handler.openIframe();
+  });
+</script>
+{% endblock %}

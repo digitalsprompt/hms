@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<header class="page-hero">
+  <div class="page-hero-content">
+    <p class="label">Account Profile</p>
+    <h1>Profile Details</h1>
+    <p>Review the personal information tied to your StaySync account.</p>
+  </div>
+</header>
+
+<main class="section auth-shell">
+  <section class="auth-card wide">
+    <div class="profile-hero-card">
+      <div>
+        {% if profile.image %}
+        <img src="{{ profile.image.url }}" alt="Profile image" class="profile-avatar" />
+        {% else %}
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User Avatar" class="profile-avatar" />
+        {% endif %}
+      </div>
+      <div class="profile-meta">
+        <div>
+          <p class="label">Member Details</p>
+          <h2>{{ request.user.username }}</h2>
+          <p class="auth-subtitle">{{ request.user.email }}</p>
+        </div>
+
+        <div class="profile-grid">
+          <div class="profile-panel">
+            <h3>Phone Number</h3>
+            <p>{{ profile.phone_number|default:"Not provided yet" }}</p>
+          </div>
+          <div class="profile-panel">
+            <h3>Address</h3>
+            <p>{{ profile.address|default:"Not provided yet" }}</p>
+          </div>
+          <div class="profile-panel full">
+            <h3>Bio</h3>
+            <p>{{ profile.bio|default:"No bio added yet." }}</p>
+          </div>
+        </div>
+
+        <div class="auth-actions">
+          <a href="{% url 'profile_update' %}" class="btn">Edit Profile</a>
+          <a href="{% url 'hotel:index' %}" class="btn ghost-dark">Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}
