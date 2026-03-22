@@ -1,7 +1,7 @@
 # from unicodedata import category
 
 from django.contrib import messages
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.views.generic import ListView, FormView, View, DeleteView
 from django.urls import reverse, reverse_lazy
 from .models import Room, Booking 
@@ -73,28 +73,21 @@ class BookingListView(ListView):
 
 class RoomDetailView(View):
     def get(self, request, *args, **kwargs):
-        category = self.kwargs.get('category', None)
         form = AvailabilityForm()
-        room_list = Room.objects.filter(category=category)
-        
-        if len(room_list)>0:
-            room = room_list[0]
-            room_category = dict(room.ROOM_CATEGORIES).get(room.category, None)
-            context = {
-                'room': room,
-                'room_category' : room_category,
-                'form': form,
-            }
-            return render(request, 'room_detail_view.html', context)
-        else:
-            return HttpResponse("category does not exist")
+        room = get_object_or_404(Room, pk=self.kwargs.get('pk'))
+        room_category = dict(room.ROOM_CATEGORIES).get(room.category, None)
+        context = {
+            'room': room,
+            'room_category' : room_category,
+            'form': form,
+        }
+        return render(request, 'room_detail_view.html', context)
     
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect(f"{reverse('account_login')}?next={request.path}")
 
-        category = self.kwargs.get('category', None)
-        room_list = Room.objects.filter(category=category)
+        room = get_object_or_404(Room, pk=self.kwargs.get('pk'))
         form = AvailabilityForm(request.POST)
         
         if form.is_valid():
@@ -103,14 +96,7 @@ class RoomDetailView(View):
             messages.error(request, "Please enter valid booking dates before continuing.")
             return redirect(request.path)
         
-        available_room = []
-        for room in room_list:
-            if check_availability(room, data['check_in'], data['check_out']):
-                available_room.append(room)
-                
-        
-        if len(available_room) > 0:
-            room = available_room[0]
+        if check_availability(room, data['check_in'], data['check_out']):
             booking = Booking.objects.create(
                 user=self.request.user,
                 room=room,
@@ -121,8 +107,8 @@ class RoomDetailView(View):
             messages.success(request, "Room booked successfully. Continue to payment to complete your reservation.")
             return redirect("payment:pay", booking_id=booking.pk)
         else:
-            messages.error(request, "No rooms are available for the selected category and dates.")
-            return redirect("hotel:RoomListView")
+            messages.error(request, "This room is not available for the selected dates.")
+            return redirect(request.path)
 
 
 class CancelBookingView(DeleteView):

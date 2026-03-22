@@ -59,5 +59,52 @@
 
         {% block content %}
         {% endblock %}
+
+        <footer class="site-footer-banner">
+            <div class="site-footer-overlay"></div>
+            <div class="site-footer-content">
+                <div class="site-footer-top">
+                    <div class="site-footer-brand">
+                        <p class="label">StayHotel</p>
+                        <h2>Stay beautifully, book confidently.</h2>
+                        <p>
+                            A refined stay experience with polished rooms, seamless reservations, and thoughtful comfort from arrival to checkout.
+                        </p>
+                    </div>
+
+                    <div class="site-footer-cta">
+                        <a class="btn" href="{% url 'hotel:RoomListView' %}">Explore Rooms</a>
+                        <a class="btn ghost" href="{% url 'hotel:BookingListView' %}">My Bookings</a>
+                    </div>
+                </div>
+
+                <div class="site-footer-grid">
+                    <div>
+                        <h3>Quick Links</h3>
+                        <a href="{% url 'hotel:index' %}">Home</a>
+                        <a href="{% url 'hotel:RoomListView' %}">Rooms</a>
+                        <a href="{% url 'hotel:BookingListView' %}">Reservations</a>
+                    </div>
+
+                    <div>
+                        <h3>Guest Services</h3>
+                        <p>Luxury suites and curated comfort</p>
+                        <p>Fast reservation flow</p>
+                        <p>Secure online payment</p>
+                    </div>
+
+                    <div>
+                        <h3>Contact</h3>
+                        <p>Lagos</p>
+                        <p>support@stayhotel.com</p>
+                        <p>+234 800 000 0000</p>
+                    </div>
+                </div>
+
+                <div class="site-footer-bottom">
+                    <p>&copy; 2026 StayHotel. Crafted Oluwafemi for memorable stays.</p>
+                </div>
+            </div>
+        </footer>
 </body>
 </html>

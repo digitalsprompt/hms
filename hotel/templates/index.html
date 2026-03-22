@@ -70,7 +70,7 @@
                                 <span>Air Conditioning</span>
                                 <span>Breakfast Ready</span>
                             </div>
-                            <a href="{% url 'hotel:RoomDetailView' room.category %}" class="btn featured-room-btn">Discover More</a>
+                            <a href="{% url 'hotel:RoomDetailView' room.pk %}" class="btn featured-room-btn">Discover More</a>
                         </div>
                     </div>
                     <div class="room-rail room-rail-right" style="background-image: url('{{ room.image.url }}');"></div>
@@ -169,13 +169,6 @@
         </article>
     </section>
 
-    <section class="editorial-review-banner">
-        <div class="editorial-review-overlay"></div>
-        <div class="editorial-review-content">
-            <a class="btn" href="{% url 'hotel:BookingListView' %}">Book Now</a>
-            <h2>Guest Reviews</h2>
-        </div>
-    </section>
 </main>
 
 <script>
